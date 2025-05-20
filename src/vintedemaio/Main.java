@@ -1,33 +1,28 @@
 package vintedemaio;
 
 public class Main {
-public static void main(String[] args) {
 
-    ContarNo.Node raiz = new ContarNo.Node("A");
-    raiz.esquerda = new ContarNo.Node("B");
-    raiz.direita = new ContarNo.Node("C");
-    raiz.esquerda.esquerda = new ContarNo.Node("D");
-    raiz.esquerda.direita = new ContarNo.Node("E");
-    raiz.direita.direita = new ContarNo.Node("F");
+    public static void main(String[] args) {
 
-    int total = ContarNo.contarNos(raiz);
-    System.out.println("Total de nós: " + total);
+        Node raiz = new Node("A");
+        raiz.esquerda = new Node("B");
+        raiz.direita = new Node("C");
+        raiz.esquerda.esquerda = new Node("D");
+        raiz.esquerda.direita = new Node("E");
+        raiz.direita.direita = new Node("F");
 
-    System.out.print("Pré-Ordem: ");
-    ContarNo.preOrdem(raiz);
-    System.out.println();
+        System.out.println("Total de nós: " + new ContarNo().contarNos(raiz));
 
-    System.out.print("Em-Ordem: ");
-    ContarNo.emOrdem(raiz);
-    System.out.println();
+        System.out.print("Pré-Ordem: ");
+        new PreOrdem().preOrdem(raiz);
 
-    System.out.print("Pós-Ordem: ");
-    ContarNo.posOrdem(raiz);
-    System.out.println();
+        System.out.print("\nEm Ordem: ");
+        new EmOrdem().emOrdem(raiz);
 
-    System.out.print("Busca em Nível: ");
-    ContarNo.buscaNivel(raiz);
-    System.out.println();
+        System.out.print("\nPós-Ordem: ");
+        new PosOrdem().posOrdem(raiz);
 
-}
+        System.out.print("\nBusca por nível: ");
+        BuscarNivel.buscaNivel(raiz);
+    }
 }
