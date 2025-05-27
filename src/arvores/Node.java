@@ -10,4 +10,8 @@ public class Node {
         this.esquerda = null;
         this.direita = null;
     }
+    @Override
+    public String toString() {
+        return valor;
+    }
 }

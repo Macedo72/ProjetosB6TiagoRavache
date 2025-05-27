@@ -10,7 +10,7 @@ public class Main {
         raiz.direita.esquerda = new Node("F");
 
         System.out.println("Total de Nós: " + new Arvore().contarNos(raiz));
-
+        Arvore arvore = new Arvore();
         System.out.print("Pré-Ordem: ");
         new Arvore().preOrdem(raiz);
 
@@ -22,5 +22,16 @@ public class Main {
 
         System.out.print("\nBusca por nível: ");
         Arvore.buscaNivel(raiz);
+        System.out.println(" ");
+
+        System.out.println("-----------------sem recursividade----------------- ");
+        System.out.println("Total de nós SR: " + arvore.contarNoSR(raiz));
+        System.out.print("Pré-Ordem SR: "); arvore.preOrdemSR(raiz);
+        System.out.println();
+        System.out.print("Em-Ordem SR: "); arvore.emOrdemSR(raiz);
+        System.out.println();
+        System.out.print("Pós-Ordem SR: "); arvore.posOrdemSR(raiz);
+        System.out.println();
+        System.out.print("Busca por nível SR: "); Arvore.buscaNivel(raiz);
     }
 }
