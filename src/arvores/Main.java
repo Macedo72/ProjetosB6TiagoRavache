@@ -35,5 +35,7 @@ public class Main {
         System.out.print("Pós-Ordem SR: "); arvore.posOrdemSR(raiz);
         System.out.println();
         System.out.print("Busca por nível SR: "); Arvore.buscaNivel(raiz);
+        System.out.println();
+        System.out.print("Totan de nós folha SR: " + arvore.contarNoFolha(raiz));
     }
 }

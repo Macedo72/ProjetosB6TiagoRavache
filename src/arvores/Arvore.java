@@ -126,4 +126,22 @@ public class Arvore {
         }
         return contador;
     }
+
+    public int contarNoFolhaSR(Node raiz){
+        if (raiz == null) return 0;
+        int contador = 0;
+
+        Stack<Node> pilha = new Stack<>();
+        pilha.push(raiz);
+
+        while (!pilha.isEmpty()) {
+            Node atual = pilha.pop();
+            if (atual.esquerda == null && atual.direita == null){
+                contador++;
+            }
+            if (atual.direita != null) pilha.push(atual.direita);
+            if (atual.esquerda != null) pilha.push(atual.esquerda);
+        }
+        return contador;
+    }
 }
