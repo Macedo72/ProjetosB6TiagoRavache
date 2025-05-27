@@ -22,6 +22,8 @@ public class Main {
 
         System.out.print("\nBusca por nível: ");
         Arvore.buscaNivel(raiz);
+
+        System.out.print("\nTotal de nós folha: " + arvore.contarNoFolha(raiz));
         System.out.println(" ");
 
         System.out.println("-----------------sem recursividade----------------- ");

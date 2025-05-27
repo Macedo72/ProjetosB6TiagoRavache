@@ -55,6 +55,12 @@ public class Arvore {
         }
     }
 
+    public int contarNoFolha(Node raiz){
+        if (raiz == null) return 0;
+        if (raiz.esquerda == null && raiz.direita == null) return 1;
+        return contarNoFolha(raiz.esquerda) + contarNoFolha(raiz.direita);
+    }
+
     /* -----------------------------sem recursividade--------------------------------- */
 
     public void preOrdemSR(Node raiz){
