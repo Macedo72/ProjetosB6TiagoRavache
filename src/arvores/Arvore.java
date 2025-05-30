@@ -135,7 +135,7 @@ public class Arvore {
         fila.add(raiz);
         while (!fila.isEmpty()){
             Node atual = fila.poll();
-            contador = 1;
+            contador++;
             if (atual.esquerda != null) fila.add(atual.esquerda);
             if (atual.direita != null) fila.add(atual.direita);
         }

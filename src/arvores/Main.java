@@ -28,6 +28,8 @@ public class Main {
 
         System.out.println("-----------------sem recursividade----------------- ");
         System.out.println("Total de nós SR: " + arvore.contarNoSR(raiz));
+
+        System.out.println("Total de nós SR com fila: " + arvore.contarNoSRComFila(raiz));
         System.out.print("Pré-Ordem SR: "); arvore.preOrdemSR(raiz);
         System.out.println();
         System.out.print("Em-Ordem SR: "); arvore.emOrdemSR(raiz);
@@ -36,6 +38,6 @@ public class Main {
         System.out.println();
         System.out.print("Busca por nível SR: "); Arvore.buscaNivel(raiz);
         System.out.println();
-        System.out.print("Totan de nós folha SR: " + arvore.contarNoFolha(raiz));
+        System.out.print("Total de nós folha SR: " + arvore.contarNoFolha(raiz));
     }
 }
