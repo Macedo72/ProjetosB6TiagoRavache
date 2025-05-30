@@ -126,6 +126,21 @@ public class Arvore {
         }
         return contador;
     }
+    public int contarNoSRComFila(Node raiz){
+        if (raiz == null) return 0;
+
+        Queue<Node> fila = new LinkedList<>();
+        int contador = 0;
+
+        fila.add(raiz);
+        while (!fila.isEmpty()){
+            Node atual = fila.poll();
+            contador = 1;
+            if (atual.esquerda != null) fila.add(atual.esquerda);
+            if (atual.direita != null) fila.add(atual.direita);
+        }
+        return contador;
+    }
 
     public int contarNoFolhaSR(Node raiz){
         if (raiz == null) return 0;
@@ -144,4 +159,6 @@ public class Arvore {
         }
         return contador;
     }
+
+
 }
