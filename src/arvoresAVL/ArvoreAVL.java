@@ -1,7 +1,7 @@
 package arvoresAVL;
 
 public class ArvoreAVL {
-    private Node raiz;
+    public Node raiz;
 
     private int altura(Node node) {
         return (node == null) ? 0 : node.altura;
@@ -14,11 +14,12 @@ public class ArvoreAVL {
     private void atualizarAlt(Node node) {
         node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
     }
-
+        // Math max pega dois numeros e retorna o maior entre eles
     private Node rotacaoDireita(Node y) {
         Node x = y.esquerda;
         Node z = x.direita;
 
+        // realizar rotacao
         x.direita = y;
         y.esquerda = z;
 
@@ -40,30 +41,32 @@ public class ArvoreAVL {
     }
 
     public Node insercao(Node node, int valor) {
-        if (node == null) return new Node(valor);
+        if (node == null)
+            return new Node(valor);
 
-        if (valor < node.valor) node.esquerda = insercao(node.esquerda, valor);
-        else if (valor < node.valor) node.direita = insercao(node.direita, valor);
-        else return node;
+        if (valor < node.valor)
+            node.esquerda = insercao(node.esquerda, valor);
+        else if (valor < node.valor)
+            node.direita = insercao(node.direita, valor);
+        else
+            return node;
 
         atualizarAlt(node);
         int fatorBalan = getFatorBalan(node);
 
-        // left-left
+        // verificar casos de desbalanceamento
+
         if (fatorBalan > 1 && valor < node.esquerda.valor)
             return rotacaoDireita(node);
 
-        // right-right
         if (fatorBalan < -1 && valor > node.direita.valor)
             return rotacaoEsquerda(node);
 
-        // left-right
         if (fatorBalan > 1 && valor > node.esquerda.valor) {
             node.esquerda = rotacaoEsquerda(node.esquerda);
             return rotacaoDireita(node);
         }
 
-        // right-left
         if (fatorBalan < -1 && valor < node.direita.valor) {
             node.direita = rotacaoDireita(node.direita);
             return rotacaoEsquerda(node);
