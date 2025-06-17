@@ -1,13 +1,15 @@
 package arvoreRB;
 
 public class Node {
+    public enum Cor { VERMELHO, PRETO }
+
     public int valor;
     public Node esquerda, direita, parent;
-    public boolean vermelho;
+    public Cor cor;
 
     public Node(int valor) {
         this.valor = valor;
-        this.vermelho = true; // Começa vermelho por padrão na inserção
+        this.cor = Cor.VERMELHO; // todo nó novo começa vermelho
         this.esquerda = null;
         this.direita = null;
         this.parent = null;

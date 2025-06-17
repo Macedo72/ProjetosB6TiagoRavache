@@ -1,130 +1,179 @@
 package arvoreRB;
 
-import java.awt.*;
-
 public class ArvoreRB {
-    Node raiz;
+    private final Node NIL = new Node(0);
+    private Node raiz;
 
-    public void inserirRB(int valor) {
-        raiz = inserirRB(raiz, valor);
+    public ArvoreRB() {
+        NIL.cor = Node.Cor.PRETO;
+        NIL.esquerda = NIL.direita = NIL.parent = NIL;
+        raiz = NIL;
     }
 
-    Node inserirRB(Node node, int valor) {
-        if (node == null) return new Node(valor);
-        if (valor < node.valor)
-            node.esquerda = inserirRB(node.esquerda, valor);
-        else if (valor > node.valor)
-            node.direita = inserirRB(node.direita, valor);
-        else
-            return node;
+    public void inserir(int valor) {
+        Node node = new Node(valor);
+        node.parent = NIL;
+        node.esquerda = NIL;
+        node.direita = NIL;
+        node.cor = Node.Cor.VERMELHO;
 
-    }
-    private void rightRotate(Node y){
-        Node x = y.esquerda;
-        y.esquerda = x.direita;
-        if (x.direita != NIL) x.direita.parent = y;
-        x.parent = y.parent;
-
-        if(y.parent == null) root = x;
-        else if (y == y.parent.direita) y.parent.direita = x;
-        else y.parent.esquerda = x;
-
-        x.direita = y;
-        y.esquerda = x;
-
-
-    }
-    private void leftRotate(Node x) {
-        Node y = x.direita;
-        x.direita = y.esquerda;
-        if (y.esquerda != NIL) y.esquerda.parent = x;
-
-        y.parent = x.parent;
-        if (x.parent == null) root = y;
-        else if (x == x.parent.esquerda) x.parent.esquerda = y;
-        else x.parent.direita = y;
-
-        y.esquerda = x;
-        x.direita = y;
-    }
-
-    public void insert(int key){
-        Node node = new Node(key);
-        node.esquerda = node.direita = node.parent = NIL;
-        Node y = null;
-        Node x = root;
+        Node y = NIL;
+        Node x = raiz;
 
         while (x != NIL) {
             y = x;
-            if (node.key < x.key) x = x.esquerda;
-            else x = x.direita;
+            if (node.valor < x.valor) {
+                x = x.esquerda;
+            } else {
+                x = x.direita;
+            }
         }
+
         node.parent = y;
-        if (y == null) root = node;
-        else if (node.key < y.key) y.esquerda = node;
-        else y.direita = node;
+        if (y == NIL) {
+            raiz = node;
+        } else if (node.valor < y.valor) {
+            y.esquerda = node;
+        } else {
+            y.direita = node;
+        }
 
-        node.esquerda = NIL;
-        node.direita = NIL;
-        node.color = Color.RED;
-
-        inserFix(node);
+        inserirFix(node);
     }
 
-    private void inserFix(Node k) {
-        while (k.parent != null && k.parent.color == Color.RED){
-            if (k.parent == k.parent.parent.esquerda){
-                Node u = k.parent.parent.direita;
-                if (u.color == Color.RED){
-                    k.parent.color = Color.BLACK;
-                    u.color = Color.BLACK;
-                    k.parent.parent.color = Color.RED;
-                    k = k.parent.direita;
-                } else{
-                    if (k == k.parent.direita){
+    private void inserirFix(Node k) {
+        Node u;
+        while (k.parent.cor == Node.Cor.VERMELHO) {
+            if (k.parent == k.parent.parent.esquerda) {
+                u = k.parent.parent.direita;
+                if (u.cor == Node.Cor.VERMELHO) {
+                    // Caso 1: tio vermelho
+                    k.parent.cor = Node.Cor.PRETO;
+                    u.cor = Node.Cor.PRETO;
+                    k.parent.parent.cor = Node.Cor.VERMELHO;
+                    k = k.parent.parent;
+                } else {
+                    if (k == k.parent.direita) {
+                        // Caso 2: k é filho direito
                         k = k.parent;
                         leftRotate(k);
                     }
-                    k.parent.color = Color.BLACK;
-                    k.parent.parent.color = Color.RED;
+                    // Caso 3: k é filho esquerdo
+                    k.parent.cor = Node.Cor.PRETO;
+                    k.parent.parent.cor = Node.Cor.VERMELHO;
                     rightRotate(k.parent.parent);
-                } else {
-                    Node u = k.parent.parent.esquerda;
-                    if (u.color == Color.RED) {
-                        k.parent.color = Color.BLACK;
-                        u.color = Color.BLACK;
-                        k.parent.parent.color = Color.RED;
-                        k = k.parent.parent;
-                    } else {
-                        if (k == k.parent.esquerda){
-                            k = k.parent;
-                            rightRotate(k);
-                        }
-                        k.parent.color = Color.BLACK;
-                        k.parent.parent.color = Color.RED;
-                        leftRotate(k.parent.parent);
-                    }
                 }
-                if (k == root) break;
+            } else {
+                u = k.parent.parent.esquerda;
+                if (u.cor == Node.Cor.VERMELHO) {
+                    // Caso 1 (espelhado)
+                    k.parent.cor = Node.Cor.PRETO;
+                    u.cor = Node.Cor.PRETO;
+                    k.parent.parent.cor = Node.Cor.VERMELHO;
+                    k = k.parent.parent;
+                } else {
+                    if (k == k.parent.esquerda) {
+                        // Caso 2 (espelhado)
+                        k = k.parent;
+                        rightRotate(k);
+                    }
+                    // Caso 3 (espelhado)
+                    k.parent.cor = Node.Cor.PRETO;
+                    k.parent.parent.cor = Node.Cor.VERMELHO;
+                    leftRotate(k.parent.parent);
+                }
             }
-            root.color = Color.BLACK;
+            if (k == raiz) {
+                break;
+            }
+        }
+        raiz.cor = Node.Cor.PRETO;
+    }
+
+    private void leftRotate(Node x) {
+        Node y = x.direita;
+        x.direita = y.esquerda;
+        if (y.esquerda != NIL) {
+            y.esquerda.parent = x;
+        }
+        y.parent = x.parent;
+        if (x.parent == NIL) {
+            raiz = y;
+        } else if (x == x.parent.esquerda) {
+            x.parent.esquerda = y;
+        } else {
+            x.parent.direita = y;
+        }
+        y.esquerda = x;
+        x.parent = y;
+    }
+
+    private void rightRotate(Node x) {
+        Node y = x.esquerda;
+        x.esquerda = y.direita;
+        if (y.direita != NIL) {
+            y.direita.parent = x;
+        }
+        y.parent = x.parent;
+        if (x.parent == NIL) {
+            raiz = y;
+        } else if (x == x.parent.direita) {
+            x.parent.direita = y;
+        } else {
+            x.parent.esquerda = y;
+        }
+        y.direita = x;
+        x.parent = y;
+    }
+
+    public void inorder() {
+        inorderHelper(raiz);
+        System.out.println();
+    }
+
+    private void inorderHelper(Node node) {
+        if (node != NIL) {
+            inorderHelper(node.esquerda);
+            System.out.print(node.valor + "(" + node.cor + ") ");
+            inorderHelper(node.direita);
         }
     }
-    private void transplant(Node u, Node v){
-        if(u.parent == null) root = v;
-        else if (u == u.parent.esquerda) u.parent.esquerda = v;
-        else u.parent.direita = v;
+
+    // Busca nó pela chave
+    private Node searchTree(Node node, int valor) {
+        if (node == NIL || valor == node.valor) {
+            return node;
+        }
+        if (valor < node.valor) {
+            return searchTree(node.esquerda, valor);
+        } else {
+            return searchTree(node.direita, valor);
+        }
+    }
+
+    private void transplant(Node u, Node v) {
+        if (u.parent == NIL) {
+            raiz = v;
+        } else if (u == u.parent.esquerda) {
+            u.parent.esquerda = v;
+        } else {
+            u.parent.direita = v;
+        }
         v.parent = u.parent;
     }
-    public void delete(int key){
-        Node z = searchTree(root, key);
-        if (z == NIL)
+
+    public void delete(int valor) {
+        Node z = searchTree(raiz, valor);
+        if (z == NIL) {
+            System.out.println("Valor " + valor + " não encontrado na arvore.");
             return;
+        }
+
         Node y = z;
-        Color yOriginalColor = y.color;
+        Node.Cor yOriginalCor = y.cor;
         Node x;
 
-        if (z.esquerda == NIL){
+        if (z.esquerda == NIL) {
             x = z.direita;
             transplant(z, z.direita);
         } else if (z.direita == NIL) {
@@ -132,10 +181,11 @@ public class ArvoreRB {
             transplant(z, z.esquerda);
         } else {
             y = minimum(z.direita);
-            yOriginalColor = y.color;
+            yOriginalCor = y.cor;
             x = y.direita;
-            if (y.parent == z) x.parent = y;
-            else {
+            if (y.parent == z) {
+                x.parent = y;
+            } else {
                 transplant(y, y.direita);
                 y.direita = z.direita;
                 y.direita.parent = y;
@@ -143,83 +193,73 @@ public class ArvoreRB {
             transplant(z, y);
             y.esquerda = z.esquerda;
             y.esquerda.parent = y;
-            y.color = z.color;
+            y.cor = z.cor;
         }
-        if (yOriginalColor == Color.BLACK) deleteFix(x);
+        if (yOriginalCor == Node.Cor.PRETO) {
+            deleteFix(x);
+        }
     }
 
-    private void deleteFix(Node x){
+    private void deleteFix(Node x) {
         Node w;
-        while (x != root && x.color == Color.BLACK){
-            if (x == x.parent.esquerda){
+        while (x != raiz && x.cor == Node.Cor.PRETO) {
+            if (x == x.parent.esquerda) {
                 w = x.parent.direita;
-                if (w.color == Color.RED) {
-                    w.color = Color.BLACK;
-                    x.parent.color = Color.RED;
+                if (w.cor == Node.Cor.VERMELHO) {
+                    w.cor = Node.Cor.PRETO;
+                    x.parent.cor = Node.Cor.VERMELHO;
                     leftRotate(x.parent);
                     w = x.parent.direita;
                 }
-                if (w.esquerda.color == Color.BLACK && w.direita.color) == Color.BLACK{
-                    w.color = Color.RED;
+                if (w.esquerda.cor == Node.Cor.PRETO && w.direita.cor == Node.Cor.PRETO) {
+                    w.cor = Node.Cor.VERMELHO;
                     x = x.parent;
                 } else {
-                    if (w.direita.color == Color.BLACK){
-                        w.esquerda.color = Color.BLACK;
-                        w.color = Color.RED;
+                    if (w.direita.cor == Node.Cor.PRETO) {
+                        w.esquerda.cor = Node.Cor.PRETO;
+                        w.cor = Node.Cor.VERMELHO;
                         rightRotate(w);
                         w = x.parent.direita;
                     }
-                    w.color = x.parent.color;
-                    x.parent.color = Color.BLACK;
-                    w.direita.color = Color.BLACK;
+                    w.cor = x.parent.cor;
+                    x.parent.cor = Node.Cor.PRETO;
+                    w.direita.cor = Node.Cor.PRETO;
                     leftRotate(x.parent);
-                    x = root;
-                } else {
+                    x = raiz;
+                }
+            } else {
+                w = x.parent.esquerda;
+                if (w.cor == Node.Cor.VERMELHO) {
+                    w.cor = Node.Cor.PRETO;
+                    x.parent.cor = Node.Cor.VERMELHO;
+                    rightRotate(x.parent);
                     w = x.parent.esquerda;
-                    if (w.color == Color.RED){
-                        w.color = Color.BLACK;
-                        x.parent.color = Color.RED;
-                        rightRotate(x.parent);
+                }
+                if (w.direita.cor == Node.Cor.PRETO && w.esquerda.cor == Node.Cor.PRETO) {
+                    w.cor = Node.Cor.VERMELHO;
+                    x = x.parent;
+                } else {
+                    if (w.esquerda.cor == Node.Cor.PRETO) {
+                        w.direita.cor = Node.Cor.PRETO;
+                        w.cor = Node.Cor.VERMELHO;
+                        leftRotate(w);
                         w = x.parent.esquerda;
                     }
-                    if (w.direita.color == Color.BLACK && w.esquerda.color == Color.BLACK){
-                        w.color = Color.RED;
-                        x = x.parent;
-                    } else {
-                        if (w.esquerda.color == Color.BLACK){
-                            w.direita.color = Color.BLACK;
-                            w.color = Color.RED;
-                            leftRotate(w);
-                            w = x.parent.esquerda;
-                        }
-                        w.color = x.parent.color;
-                        x.parent.color = Color.BLACK;
-                        w.esquerda.color = Color.BLACK;
-                        rightRotate(x.parent);
-                        x = root;
-                    }
+                    w.cor = x.parent.cor;
+                    x.parent.cor = Node.Cor.PRETO;
+                    w.esquerda.cor = Node.Cor.PRETO;
+                    rightRotate(x.parent);
+                    x = raiz;
                 }
             }
-            x.color = Color.BLACK;
         }
+        x.cor = Node.Cor.PRETO;
     }
-    private Node searchTree(Node node, int key){
-        if (node == NIL || key == node.key)
-            return node;
-        if (key < node.key)
-            return searchTree(node.esquerda, key);
-        return searchTree(node.direita, key);
-    }
-    public void inorder(){
-        inorderHelper(root);
-        System.out.println();
-    }
-    private void inorderHelper(Node node){
-        if (node != NIL) {
-            inorderHelper(node.esquerda);
-            String colorSuffix = (node.color == Color.RED) ? "R" : "B";
-            System.out.print(node.key + colorSuffix + " ");
-            inorderHelper(node.direita);
+
+    private Node minimum(Node node) {
+        while (node.esquerda != NIL) {
+            node = node.esquerda;
         }
+        return node;
     }
 }
