@@ -9,7 +9,7 @@ public class Node {
 
     public Node(int valor) {
         this.valor = valor;
-        this.cor = Cor.VERMELHO; // todo nó novo começa vermelho
+        this.cor = Cor.VERMELHO;
         this.esquerda = null;
         this.direita = null;
         this.parent = null;
